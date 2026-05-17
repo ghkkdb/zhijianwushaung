@@ -1,0 +1,34 @@
+{
+  "match": "30-2",
+  "action": "结算",
+  "arrive_click_x": "51",
+  "arrive_click_y": "925",
+  "save_confirm_x": "257",
+  "save_confirm_y": "545",
+  "enable_movement": true,
+  "resolution_width": "526",
+  "resolution_height": "977",
+  "lock_resolution_after_modify": false,
+  "movement_actions": [
+    {
+      "key": "D",
+      "duration": 2.0,
+      "count": 1
+    },
+    {
+      "key": "A",
+      "duration": 0.1,
+      "count": 1
+    },
+    {
+      "key": "F",
+      "duration": 0.05,
+      "count": 1
+    },
+    {
+      "key": "1",
+      "duration": 0.05,
+      "count": 1
+    }
+  ]
+}

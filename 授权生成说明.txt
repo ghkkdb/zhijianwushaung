@@ -1,0 +1,33 @@
+1. 管理员交互生成授权文件
+
+直接运行：
+
+python license_tool.py
+
+然后按提示输入客户机器码、客户名、到期时间即可。
+
+2. 查看当前电脑机器码
+
+python license_tool.py machine-code
+
+3. 给客户机器签发永久授权
+
+powershell -ExecutionPolicy Bypass -File .\generate_license.ps1 -MachineCode "客户机器码" -LicensedTo "客户名"
+
+4. 给客户机器签发带到期时间的授权
+
+powershell -ExecutionPolicy Bypass -File .\generate_license.ps1 -MachineCode "客户机器码" -LicensedTo "客户名" -ExpiresAt "2026-12-31T23:59:59+08:00"
+
+5. 使用方式
+
+批量生成时，授权工具会默认输出不同文件名，例如：
+
+license_张三_BBE74A9E-DB99C2D3_20260516_225500.lic
+
+这样方便管理员区分客户和生成时间。
+
+发给客户使用时，需要把对应授权文件改名为 license.lic，再放到 zhijianwushuang.exe 同级目录。
+
+6. 注意
+
+private_key.pem 是签发授权用的私钥，只能自己保管，不要发给客户。
