@@ -339,7 +339,7 @@ if __name__ == "__main__":
         img_cv2 = cv2.cvtColor(img_array, cv2.COLOR_BGRA2BGR)
         return img_cv2
 
-    def find_template(main_img, template_path, threshold=0.8, strict=False, edge_threshold=0.45, focus_threshold=0.82):
+    def find_template(main_img, template_path, threshold=0.8, strict=False, edge_threshold=0.3, focus_threshold=0.6):
         """在主图中寻找模板图，返回中心坐标等信息"""
         template = cv2.imread(template_path)
         if template is None:
@@ -369,9 +369,10 @@ if __name__ == "__main__":
                 edge_result = cv2.matchTemplate(patch_edges, template_edges, cv2.TM_CCOEFF_NORMED)
                 _, edge_score, _, _ = cv2.minMaxLoc(edge_result)
 
-                focus_width = max(1, int(tw * 0.62))
-                focus_patch = gray_patch[:, :focus_width]
-                focus_template = template_match_img[:, :focus_width]
+                focus_x2 = max(1, tw // 2)
+                focus_y1 = max(0, th // 2)
+                focus_patch = gray_patch[focus_y1:, :focus_x2]
+                focus_template = template_match_img[focus_y1:, :focus_x2]
                 focus_result = cv2.matchTemplate(focus_patch, focus_template, cv2.TM_CCOEFF_NORMED)
                 _, focus_score, _, _ = cv2.minMaxLoc(focus_result)
 
@@ -875,10 +876,10 @@ if __name__ == "__main__":
             match_result = find_template(
                 screen_img,
                 trigger_template_path,
-                threshold=0.88,
+                threshold=0.8,
                 strict=True,
-                edge_threshold=0.45,
-                focus_threshold=0.82
+                edge_threshold=0.3,
+                focus_threshold=0.6
             )
             if not match_result:
                 interruptible_sleep(0.2, match_event=match_event)

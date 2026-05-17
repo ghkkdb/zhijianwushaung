@@ -10,8 +10,8 @@ def find_template(
     template_path,
     threshold=0.8,
     strict=False,
-    edge_threshold=0.45,
-    focus_threshold=0.82,
+    edge_threshold=0.3,
+    focus_threshold=0.6,
 ):
     """Copy of the runtime template matching logic from main.py."""
     template = cv2.imread(str(template_path))
@@ -49,9 +49,10 @@ def find_template(
             )
             _, edge_score, _, _ = cv2.minMaxLoc(edge_result)
 
-            focus_width = max(1, int(tw * 0.62))
-            focus_patch = gray_patch[:, :focus_width]
-            focus_template = template_match_img[:, :focus_width]
+            focus_x2 = max(1, tw // 2)
+            focus_y1 = max(0, th // 2)
+            focus_patch = gray_patch[focus_y1:, :focus_x2]
+            focus_template = template_match_img[focus_y1:, :focus_x2]
             focus_result = cv2.matchTemplate(
                 focus_patch, focus_template, cv2.TM_CCOEFF_NORMED
             )
@@ -82,6 +83,7 @@ def find_template(
         "edge_threshold": float(edge_threshold),
         "focus_score": None if focus_score is None else float(focus_score),
         "focus_threshold": float(focus_threshold),
+        "focus_region": "left_bottom_quarter",
     }
 
 
@@ -107,8 +109,8 @@ def parse_args():
     parser.add_argument("--template", required=True, help="模板图片路径")
     parser.add_argument("--strict", action="store_true", help="启用严格匹配")
     parser.add_argument("--threshold", type=float, default=0.8, help="主匹配阈值")
-    parser.add_argument("--edge-threshold", type=float, default=0.45, help="边缘匹配阈值")
-    parser.add_argument("--focus-threshold", type=float, default=0.82, help="左侧重点区域阈值")
+    parser.add_argument("--edge-threshold", type=float, default=0.3, help="边缘匹配阈值")
+    parser.add_argument("--focus-threshold", type=float, default=0.6, help="左下角数字区域阈值")
     parser.add_argument("--output", help="保存标注结果图片路径")
     return parser.parse_args()
 
